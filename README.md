@@ -1,7 +1,29 @@
 # xiaosi-maritime-single-window
 
-This is a simple example program for a maritime single window.
+A simple program that prints the text "There are 42 portcalls".
 
 ## Instructions
 
-Just run the `hello_world.py` file and it will output "There are 42 portcalls".
+1. Clone the repository to your local machine:
+```
+git clone https://github.com/xiaosihuangsi/xiaosi-maritime-single-window.git
+```
+```
+git pull origin main
+```
+
+2. Navigate to the repository directory:
+
+```
+cd xiaosi-maritime-single-window
+```
+
+3. Run the Python program:
+
+```
+python3 simple_program.py
+```
+
+After running the program, you will see the output "There are 42 portcalls".
+
+
