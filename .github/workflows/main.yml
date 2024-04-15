@@ -12,8 +12,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-        with:
-          node-version: '20' 
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
       - name: Build Docker Image
         run: |
@@ -21,5 +22,3 @@ jobs:
           docker tag xiaosi-maritime-single-window xiaosihuangsi/xiaosi-maritime-single-window
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u xiaosihuangsi --password-stdin
           docker push xiaosihuangsi/xiaosi-maritime-single-window
-
-      # Add more steps here for testing, linting, etc.
