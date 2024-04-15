@@ -6,18 +6,37 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Build Docker Image
-        run: |
-          docker build -t xiaosi-maritime-single-window .
-          docker tag xiaosi-maritime-single-window xiaosihuangsi/xiaosi-maritime-single-window
-          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u xiaosihuangsi --password-stdin
-          docker push xiaosihuangsi/xiaosi-maritime-single-window
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Add more steps here for testing, linting, etc.
+      - name: Build Docker image
+        run: docker build -t xiaosihuangsi/xiaosi-maritime-single-window .
+
+      - name: Push Docker image to Docker Hub
+        run: docker push xiaosihuangsi/xiaosi-maritime-single-window
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure Web App (Dev)
+        run: |
+          az webapp create --name my-maritime-single-window-dev --resource-group xiaosi --plan my-plan --deployment-container-image-name xiaosihuangsi/xiaosi-maritime-single-window
+
+      - name: Deploy to Azure Web App (Test)
+        run: |
+          az webapp create --name my-maritime-single-window-test --resource-group xiaosi --plan my-plan --deployment-container-image-name xiaosihuangsi/xiaosi-maritime-single-window
+
+      - name: Deploy to Azure Web App (Prod)
+        run: |
+          az webapp create --name my-maritime-single-window-prod --resource-group xiaosi --plan my-plan --deployment-container-image-name xiaosihuangsi/xiaosi-maritime-single-window
