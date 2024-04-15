@@ -8,9 +8,6 @@ A simple program that prints the text "There are 42 portcalls".
 ```
 git clone https://github.com/xiaosihuangsi/xiaosi-maritime-single-window.git
 ```
-```
-git pull origin main
-```
 
 2. Navigate to the repository directory:
 
