@@ -6,28 +6,48 @@
 trigger:
 - main
 
-pool:
-  vmImage: 'macOS-latest'
+stages:
+- stage: Dev
+  displayName: 'Development'
+  jobs:
+  - job: Build
+    displayName: 'Build'
+    pool:
+      vmImage: 'macOS-latest'
+    steps:
+    - task: NuGetToolInstaller@1
 
-variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
 
-steps:
-- task: NuGetToolInstaller@1
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+    - task: VSTest@2
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+- stage: Test
+  displayName: 'Testing'
+  jobs:
+  - job: Test
+    displayName: 'Run Tests'
+    pool:
+      vmImage: 'macOS-latest'
+    steps:
+    # Add tasks for testing in the test environment
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+- stage: Prod
+  displayName: 'Production'
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy to Production'
+    pool:
+      vmImage: 'macOS-latest'
+    steps:
+    # Add tasks for deploying to production
