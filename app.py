@@ -19,15 +19,15 @@ def index():
     # Fetch data
     response = requests.get('https://meri.digitraffic.fi/api/port-call/v1/port-calls')
     port_calls = response.json()['portCalls']
-    # Count the number of portCallId
+    # Count the number of portCallId.
     num_port_calls = len(port_calls)
-    # Pass the enumerate function to the template context
+    # Pass the enumerate function to the template context.
     context = {
         'port_calls': port_calls,
         'num_port_calls': num_port_calls,
         'enumerate': enumerate  # Pass enumerate function to the template
     }
-    # Render the template and pass data
+    # Render the template and pass data.
     return render_template('index.html', **context)
 
 if __name__ == '__main__':
