@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port Calls</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image: linear-gradient(to bottom, #dbe4f0, #f0f3f7);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+            line-height: 1.5; /* 设置行高为 1.5 倍行高 */
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        tr:hover {
+            background-color: #e0f0ff;
+        }
+        th:nth-child(1), td:nth-child(1) {
+            width: 40px;
+        }
+        th:nth-child(2), td:nth-child(2) {
+            width: 100px;
+        }
+        th:nth-child(3), td:nth-child(3) {
+            width: 90px;
+        }
+        th:nth-child(4), td:nth-child(4) {
+            width: 130px;
+        }
+        th:nth-child(5), td:nth-child(5) {
+            width: 200px;
+        }
+        th:nth-child(6), td:nth-child(6) {
+            width: 200px;
+        }
+        th:nth-child(7), td:nth-child(7) { /* New style for Agent Info column */
+            font-size: 14px; /* Decreased font size */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>There are {{ num_port_calls }} Port Calls</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Port Call ID</th>
+                    <th>Vessel Name</th>
+                    <th>Port To Visit</th>
+                    <th>Arrival</th>
+                    <th>Departure</th>
+                    <th>Agent Info</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, port_call in enumerate(port_calls, start=1) %}
+                <tr>
+                    <td>{{ index }}</td>
+                    <td>{{ port_call.portCallId }}</td>
+                    <td>{{ port_call.vesselName }}</td>
+                    <td>{{ port_call.portToVisit }}</td>
+                    <td>{{ port_call.portAreaDetails.0.ata|datetime }}</td>
+                    <td>{{ port_call.portAreaDetails.0.atd|datetime }}</td>
+                    <td>
+                        {% for agent in port_call.agentInfo %}
+                            {{ agent.name }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
